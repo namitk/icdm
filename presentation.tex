@@ -26,10 +26,10 @@
 % \usetheme{Copenhagen}
 % \usetheme{Darmstadt}
 % \usetheme[height=5mm]{Singapore}
-\usetheme{Amsterdam}
+ \usetheme{Amsterdam}
 
 \setbeamertemplate{navigation symbols}{}
-%\useoutertheme{infolines}
+% \useoutertheme{infolines}
 
 \def\newblock{\hskip .11em plus .33em minus .07em}
 
@@ -138,17 +138,31 @@
 % 6. Backup slides (3-4)
 
 \section{Goal}
-\begin{frame}
-\frametitle{Goal}
+\begin{frame}[allowframebreaks]
+\frametitle{Goal} \vspace{-2mm}
 \begin{itemize}
-\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a small labeled set and a human labeler \vspace*{3mm}
+\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a small, possibly unrepresentative, labeled set and a human labeler \vspace*{1mm}
 \begin{itemize}
 \item \textbf{Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches. 
-\end{itemize} \vspace*{3mm}
-\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes even a single sequential scan impractical in an interactive setting \vspace*{3mm}
+\end{itemize}
+\begin{center}
+\begin{figure}
+\includegraphics[width=0.5\hsize]{figs/e1tableannote_crop}
+\caption{Absolute error (on the $Y$ axis) of different estimation algorithms against no. of labeled instances (on the $X$ axis)}
+\end{figure}
+\end{center}
+
+\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes even a single sequential scan impractical in an interactive setting
 \begin{itemize}
 \item \textbf{Results} : Close to exact estimates while reading three orders of magnitude less data
 \end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.53\hsize]{figs/allDataWts-crop}
+\caption{Comparing methods of sampling from indexed data for
+  estimating bucket weights}
+\end{center}
+\end{figure}
 \end{itemize}
 \end{frame}
 
@@ -156,9 +170,9 @@
 \begin{frame}
 \frametitle{Motivation}
 \begin{itemize}
-\item Applications rely on output of classifiers deployed on large data \\ 
+\item Applications rely on output of imperfect classifiers deployed on large datasets \\ 
 \begin{itemize}
-\item \textbf{Examples}: Web page classification, classifying columns to their semantic types
+\item \textbf{Examples}: Web page classification, classifying columns of a table to their semantic types
 \end{itemize}
 \item \textbf{Common characteristics} 
 \begin{itemize}
@@ -169,7 +183,7 @@
 \item Hence need a method that can converge to the true accuracy
 \begin{enumerate}
 \item An algorithm that returns estimate $\estPerf$ of true accuracy $\TP$ of the classifier
-\item \textit{Scalable algorithm} : should work on large datasets where the data is accessible only via an index
+\item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
 \end{enumerate} 
 \end{itemize}
 \end{frame}
@@ -183,7 +197,8 @@
 \item \citep{sawade10} present a new proposal distribution for sampling instances
 \item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume that classifier $C(\vx)$ is probabilistic \& base their selection on $\Pr(y|\vx)$ scores
 \end{itemize}
-\item 
+\item Unlike \citep{bennett10} and \citep{druck11}, instead of fixing a stratification, we learn a new one every time more data gets labeled
+\item None of the existing methods consider cases where the dataset $D$ is too large to even afford a single sequential scan %Our method is designed to perform accuracy estimation and instance selection on D which can only be accessed via an index.
 \end{itemize}
 \end{frame}
 
@@ -232,16 +247,21 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \framebreak
 
 \begin{center}
-\begin{figure}[h]
-\includegraphics[width=0.36\hsize]{figs/e1homeground_crop}
-\includegraphics[width=0.36\hsize]{figs/e1tableannote_crop}
-\includegraphics[width=0.36\hsize]{figs/e1spam_crop}
+\begin{figure}
+\includegraphics[width=0.85\hsize]{figs/e1homeground_crop}
+\caption{Homeground data: Absolute error ($Y$ axis) of different estimation algorithms against increasing number of labeled instances ($X$ axis)}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+\includegraphics[width=0.38\hsize]{figs/e1tableannote_crop}
+\includegraphics[width=0.38\hsize]{figs/e1spam_crop}
 \end{figure}
 \begin{figure}
-\includegraphics[width=0.37\hsize]{figs/e1homepredicted_crop}
-\includegraphics[width=0.37\hsize]{figs/e1dna_crop}
+\includegraphics[width=0.38\hsize]{figs/e1homepredicted_crop}
+\includegraphics[width=0.38\hsize]{figs/e1dna_crop}
 \caption{Absolute error (on the $Y$ axis) of different estimation algorithms against increasing number of labeled instances (on the $X$ axis)}
-\label{fig:overall}
 \end{figure}
 \end{center}
 
@@ -249,18 +269,22 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 
 \begin{center}
 \begin{figure}
-\includegraphics[width=0.36\hsize, height=.25\vsize]{figs/e2homeground_crop}
-\includegraphics[width=0.36\hsize, height=.25\vsize]{figs/e2tableannote_crop}
-\includegraphics[width=0.36\hsize, height=.25\vsize]{figs/e2spam_crop}
+\includegraphics[width=\hsize]{figs/e2homeground_crop}
+\caption{HomeGround data: Error of different stratification methods against increasing
+  training sizes \& for different number of bits}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+\includegraphics[width=0.5\hsize]{figs/e2tableannote_crop}
+\includegraphics[width=0.5\hsize]{figs/e2spam_crop}
 \end{figure}
 \begin{figure}
-\includegraphics[width=0.42\hsize, height=.25\vsize]{figs/e2homepredicted_crop}
-\includegraphics[width=0.42\hsize, height=.25\vsize]{figs/e2dna_crop}
+\includegraphics[width=0.5\hsize]{figs/e2homepredicted_crop}
+\includegraphics[width=0.5\hsize]{figs/e2dna_crop}
 \caption{Error of different stratification methods against increasing
-  training sizes and for different number of bits. The five methods
-  compared: No-stratify, ScoreBins, SeqProj\_hash, BRE\_hash,
-  Slogistic\_hash are presented in this order in each group of
-  bars.}
+  training sizes and for different number of bits}
 \end{figure}
 \end{center}
 
@@ -282,9 +306,9 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \section{Summary \& Conclusions}
 \begin{frame}{Summary}
 \begin{enumerate}
-\item Addressed the challenge of \emph{calibrating a classifier’s accuracy on large unlabeled datasets given small labeled data and human labeler}
-\item Proposed a stratified sampling based method that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
-\item Achieve between 15\% and 62\% relative reduction in error compared to existing approaches
+\item Addressed the challenge of \emph{calibrating a classifier's accuracy on large unlabeled datasets given small amounts of labeled data and a human labeler}
+\item Proposed a stratified sampling-based method that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
+\item Between 15\% and 62\% relative reduction achieved in error compared to existing approaches
 \item Algorithm made \emph{scalable} by proposing optimal sampling strategies for accessing indexed unlabeled data directly
 \item Close to optimal performance while reading three orders of magnitude fewer instances on large datasets 
 \end{enumerate}
