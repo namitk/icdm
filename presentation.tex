@@ -141,7 +141,28 @@
 % 5. Future work (1)
 % 6. Backup slides (3-4)
 
-\section{Goals}
+\section{Problem Motivation}
+\begin{frame}
+\frametitle{Motivation}
+\begin{itemize}
+\item Many applications rely on output of imperfect classifiers deployed on large datasets \\ 
+\begin{itemize}
+\item \textbf{Examples}: Web page classification, classifying columns of a table to their semantic types
+\end{itemize}
+\item \textbf{Common characteristics} 
+\begin{itemize}
+\item Large and diverse dataset 
+\item Labeled data unrepresentative of the entire dataset. 
+\end{itemize}
+\item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\item Hence need a method that can converge to the true accuracy
+\begin{enumerate}
+\item An algorithm that returns a good estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
+\item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
+\end{enumerate} 
+\end{itemize}
+\end{frame}
+
 \begin{frame}
 \frametitle{Goals}
 
@@ -173,27 +194,6 @@
 \end{frame}
 
 \section{Background}
-\begin{frame}
-\frametitle{Motivation}
-\begin{itemize}
-\item Many applications rely on output of imperfect classifiers deployed on large datasets \\ 
-\begin{itemize}
-\item \textbf{Examples}: Web page classification, classifying columns of a table to their semantic types
-\end{itemize}
-\item \textbf{Common characteristics} 
-\begin{itemize}
-\item Large and diverse dataset 
-\item Labeled data unrepresentative of the entire dataset. 
-\end{itemize}
-\item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
-\item Hence need a method that can converge to the true accuracy
-\begin{enumerate}
-\item An algorithm that returns estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
-\item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
-\end{enumerate} 
-\end{itemize}
-\end{frame}
-
 \begin{frame}
 \frametitle{Related Work}
 \begin{itemize}
