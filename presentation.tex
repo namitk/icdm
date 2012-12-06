@@ -187,7 +187,7 @@
 \item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
 \item Hence need a method that can converge to the true accuracy
 \begin{enumerate}
-\item An algorithm that returns estimate $\estPerf$ of true accuracy $\TP$ of the classifier
+\item An algorithm that returns estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
 \item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
 \end{enumerate} 
 \end{itemize}
@@ -255,7 +255,7 @@
 \frametitle{Scaling up -- Instance selection on large amounts of data} 
 \begin{itemize}
 \item TODO: explain where instance selection is needed
-\item TODO: describe in a line the idea behind the algorithm to perform accuracy estimation \& instance selection on unlabeled data $D$ which can only be accessed via an efficient index partition 
+\item TODO: describe the idea behind the algorithm to perform accuracy estimation \& instance selection on unlabeled data $D$ which can only be accessed via an efficient index partition 
 \end{itemize}
 \end{frame}
 
@@ -342,7 +342,7 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Summary \& Conclusions}
+\section{Summary}
 \begin{frame}{Summary}
 \begin{enumerate}
 \item Addressed the challenge of \emph{calibrating a classifier's accuracy on large unlabeled datasets given small amounts of labeled data and a human labeler}
