@@ -53,6 +53,8 @@
 \newcommand{\vW}{{\vek{W}}}
 \newcommand{\vf}{{\vek{f}}}
 \newcommand{\vF}{{\vek{F}}}
+\newcommand{\vwa}{{\vek{w}_{1\ldots r}}}
+\newcommand{\vft}{{\vek{f}}}
 
 \newcommand{\cV}{{\mbox{$\mathcal{V}$}}}
 \newcommand{\cE}{{\mbox{$\mathcal{E}$}}}
@@ -74,9 +76,9 @@
 \newcommand{\TPb}{{A}}
 \newcommand{\estPerf}{{\hat{A}}}
 \newcommand{\estURand}{{\hat{A}_R}}
-\newcommand{\estProp}{{\mbox{$\hat{A}_P$}}}
 
-\newcommand{\estSS}{{\mbox{$\hat{A}_S$}}}
+
+\newcommand{\estSS}{{\mbox{$\hat{\mu}_S$}}}
 
 \newcommand{\oracle}{{\mbox{Oracle}}}
 \newcommand{\ham}{{\mbox{Ham}}}
@@ -104,6 +106,7 @@
 \addtolength{\wideitemsep}{1pt}
 \let\olditem\item
 \renewcommand{\item}{\setlength{\itemsep}{\wideitemsep}\olditem}
+
 
 \title[]{Active Accuracy Estimation on Large Datasets}
 \author {Sunita Sarawagi, Arun Iyer, Namit Katariya}
@@ -143,7 +146,7 @@
 \begin{frame}[allowframebreaks]
 \frametitle{Goal} \vspace{-5mm}
 \begin{itemize}
-\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a small, possibly unrepresentative, labeled set and a human labeler \vspace*{1mm}
+\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{red}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
 \begin{itemize}
 \item \textbf{Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches. 
 \end{itemize}
@@ -154,13 +157,13 @@
 \end{figure}
 \end{center}
 
-\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes even a single sequential scan impractical in an interactive setting
+\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{red}{even a single sequential scan impractical} in an interactive setting
 \begin{itemize}
-\item \textbf{Results} : Close to exact estimates while reading three orders of magnitude less data
+\item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan while sampling just 2.5k instances from indexed unlabeled data
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.51\hsize]{figs/allDataWts-crop}
+\includegraphics[width=0.46\hsize]{figs/allDataWts-crop}
 \caption{Comparing methods of sampling from indexed data for
   estimating bucket weights}
 \end{center}
@@ -181,7 +184,7 @@
 \item Large and diverse dataset 
 \item Labeled data unrepresentative of the entire dataset. 
 \end{itemize}
-\item So \colorbox{yellow}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
 \item Hence need a method that can converge to the true accuracy
 \begin{enumerate}
 \item An algorithm that returns estimate $\estPerf$ of true accuracy $\TP$ of the classifier
@@ -199,27 +202,56 @@
 \item \citep{sawade10} present a new proposal distribution for sampling instances
 \item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume that classifier $C(\vx)$ is probabilistic \& base their selection on $\Pr(y|\vx)$ scores
 \end{itemize}
-\item Unlike \citep{bennett10} and \citep{druck11}, instead of fixing a stratification, we learn a new one every time more data gets labeled
+\item Unlike \citep{bennett10} and \citep{druck11}, \textcolor{red}{instead of fixing a stratification, we learn a new one every time more data gets labeled}
 \item None of the existing methods consider cases where the dataset $D$ is too large to even afford a single sequential scan %Our method is designed to perform accuracy estimation and instance selection on D which can only be accessed via an index.
 \end{itemize}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Proposed Solution}
 \begin{frame}
-\frametitle{Our Solution}
+\frametitle{Overall Idea}
+\begin{algorithm}[H]
+\begin{spacing}{0.8}
+\begin{algorithmic}[1]\itemsep-5pt
+\STATE $B=\text{\#buckets},~\vft=\text{feature vector},~\vwa=\text{hyperplanes}$
+\STATE $\estSb_b, \wt_b=\text{accuracy \& weight esimates for bucket b}$
+\REPEAT
+\STATE Learn stratification function $h(\vft|\vwa)$ 
+\STATE Stratify $L$ via $h(.)$ \& compute $\{\estSb_b:1\le b \le B\}$
+\STATE Stratify $D$ via $h(.)$ \& compute $\{\wt_b:1\le b \le B\}$
+\STATE Display accuracy estimates:  $\estSS=\sum\nolimits_b\wt_b\estSb_b$
+\STATE Get stratified sample set $L'$ from $D$
+\STATE For each $\vx_i \in L'$, get label $y_i$, and add $(\vx_i,y_i)$ to $L$
+\UNTIL{accuracy $\estSS$ not converged and labeler not bored.}
+\STATE{\bf Return} $\estSS$
+\end{algorithmic}
+\end{spacing}
+\caption{Loop for active accuracy estimation}
+\end{algorithm}
+\end{frame}
+
+\begin{frame}
+\frametitle{Learning a stratification strategy} \vspace{-8mm}
 \begin{itemize}
-\item \textbf{Stratified sampling}
+\item Stratify input space so that instances in each stratum have similar accuracy values
 \begin{itemize}
-\item Stratify input space using hash codes (projections on hyperplanes learned over the feature space)
-\item Instances in each stratum should have similar accuracy values 
-\item Estimate accuracy as weighted average of accuracy in each stratum
+\item \emph{Supervised clustering methods} : Learn a distance function \\ \textbf{Issue} : These methods do not scale well 
+\item \textbf{Proposal} : Use \textcolor{red}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
-\item \textbf{Scaling - Instance selection on large data} 
+\item 
+\item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{red}{Smooth based on labeled data in neighbouring buckets}
+\item Method agnostic to the type of classifier under consideration
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Scaling up -- Instance selection on large amounts of data} 
 \begin{itemize}
 \item TODO: explain where instance selection is needed
 \item TODO: describe in a line the idea behind the algorithm to perform accuracy estimation \& instance selection on unlabeled data $D$ which can only be accessed via an efficient index partition 
 \end{itemize}
-\item Method agnostic to the type of classifier under consideration
-\end{itemize} 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
