@@ -11,8 +11,7 @@
 
 \usepackage{amsfonts}
 \usepackage{amsthm}
-\usepackage{graphics}
-\usepackage{graphicx}
+\usepackage{graphics, tikz}
 \usepackage{subfigure}
 \usepackage{setspace}
 \usepackage{color}
@@ -142,11 +141,12 @@
 % 5. Future work (1)
 % 6. Backup slides (3-4)
 
-\section{Goal}
-\begin{frame}[allowframebreaks]
-\frametitle{Goal} \vspace{-5mm}
-\begin{itemize}
-\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{red}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
+\section{Goals}
+\begin{frame}
+\frametitle{Goals}
+
+\only<1>{
+\textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{red}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
 \begin{itemize}
 \item \textbf{Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches \textit{(See Slogistic)}
 \end{itemize}
@@ -155,9 +155,10 @@
 \includegraphics[width=0.5\hsize]{figs/e1tableannote_crop}
 \caption{Absolute error (on the $Y$ axis) of different estimation algorithms against no. of labeled instances (on the $X$ axis)}
 \end{figure}
-\end{center}
+\end{center}}
 
-\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{red}{even a single sequential scan impractical} in an interactive setting
+\only<2>{
+\textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{red}{even a single sequential scan impractical} in an interactive setting
 \begin{itemize}
 \item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan while sampling just 2.5k instances from indexed unlabeled data
 \end{itemize}
@@ -167,8 +168,8 @@
 \caption{Comparing methods of sampling from indexed data for
   estimating bucket weights}
 \end{center}
-\end{figure}
-\end{itemize}
+\end{figure}}
+
 \end{frame}
 
 \section{Background}
@@ -261,7 +262,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
-\begin{frame}[allowframebreaks]{Results}
+\begin{frame}
+\frametitle{Results}
+
+\only<1>{
+\framesubtitle{Summary of datasets used}
 \begin{center}
 \begin{table}
 \centering
@@ -281,18 +286,20 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \end{small}
 \caption{Summary of Datasets}
 \end{table}
-\end{center}
+\end{center}}
 
-\framebreak
-
+\only<2>{
+\framesubtitle{Comparison of estimation strategies on the HomeGround dataset}
 \begin{center}
 \begin{figure}
 \includegraphics[width=0.82\hsize]{figs/e1homeground_crop}
 \caption{HomeGround data: Absolute error ($Y$ axis) of different estimation algorithms against increasing number of labeled instances ($X$ axis)}
 \end{figure}
+\end{center}}
 
-\framebreak
-
+\only<3>{
+\framesubtitle{Comparison of estimation strategies}
+\begin{center}
 \begin{figure}
 \includegraphics[width=0.37\hsize]{figs/e1tableannote_crop}
 \includegraphics[width=0.37\hsize]{figs/e1spam_crop}
@@ -302,19 +309,21 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \includegraphics[width=0.37\hsize]{figs/e1dna_crop}
 \caption{Absolute error (on the $Y$ axis) of different estimation algorithms against increasing number of labeled instances (on the $X$ axis)}
 \end{figure}
-\end{center}
+\end{center}}
 
-\framebreak
-
+\only<4>{
+\framesubtitle{Comparison of different stratification methods on the HomeGround dataset}
 \begin{center}
 \begin{figure}
 \includegraphics[width=\hsize]{figs/e2homeground_crop}
 \caption{HomeGround data: Error of different stratification methods against increasing
   training sizes \& for different number of bits}
 \end{figure}
+\end{center}}
 
-\framebreak
-
+\only<5>{
+\framesubtitle{Comparison of different stratification methods}
+\begin{center}
 \begin{figure}
 \includegraphics[width=0.5\hsize]{figs/e2tableannote_crop}
 \includegraphics[width=0.5\hsize]{figs/e2spam_crop}
@@ -325,10 +334,10 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \caption{Error of different stratification methods against increasing
   training sizes and for different number of bits}
 \end{figure}
-\end{center}
+\end{center}}
 
-\framebreak
-
+\only<6>{
+\framesubtitle{Comparison of methods of sampling from indexed data for estimating bucket weights}
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.85\hsize]{figs/allDataWts-crop}
@@ -336,7 +345,7 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
   estimating bucket weights}
 \label{fig:allWts}
 \end{center}
-\end{figure}
+\end{figure}}
 
 \end{frame}
 
