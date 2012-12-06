@@ -233,14 +233,19 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Learning a stratification strategy} \vspace{-8mm}
+\frametitle{Learning a stratification strategy} %\vspace{-8mm}
 \begin{itemize}
 \item Stratify input space so that instances in each stratum have similar accuracy values
 \begin{itemize}
 \item \emph{Supervised clustering methods} : Learn a distance function \\ \textbf{Issue} : These methods do not scale well 
 \item \textbf{Proposal} : Use \textcolor{red}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
-\item 
+\item Learning hyperplanes (kindly refer the paper for details)
+\begin{itemize}
+\item \emph{Smoothing the objective} : Upper-bound with minimum of two convex objectives
+\item \emph{Optimizing the smoothed objective} : EM-like algorithm
+\item \emph{Ensuring distinct $r$ hyperplanes} : Re-weight instances -- ideas from boosting. 
+\end{itemize}
 \item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{red}{Smooth based on labeled data in neighbouring buckets}
 \item Method agnostic to the type of classifier under consideration
 \end{itemize}
