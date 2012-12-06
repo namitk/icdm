@@ -193,7 +193,7 @@
 \only<2>{
 \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{blue}{even a single sequential scan impractical} in an interactive setting
 \begin{itemize}
-\item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan while sampling just 2.5k instances from indexed unlabeled data
+\item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -415,9 +415,9 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \begin{frame}
 \frametitle{Assigning Bucket Weights}
 \begin{itemize}
-\item Sample from a proposal distribution : $\hat{A}_{S_q} = \frac{1}{|S|}\sum\nolimits_{\vx\in S} \frac{1/N}{q(\vx)}\estSb_{h(\vx)}$
+\item Sample from a proposal distribution : $\hat{\mu}_{S_q} = \frac{1}{|S|}\sum\nolimits_{\vx\in S} \frac{1/N}{q(\vx)}\estSb_{h(\vx)}$
 \item \textbf{Result} : When $q(\vx)$ is restricted so that all instances within a partition $u$ are sampled with the same probability $q_u$,
-the expected squared error between $\hat{A}_{S_q}$ and $\estSS$ is minimized when 
+the expected squared error between $\hat{\mu}_{S_q}$ and $\estSS$ is minimized when 
 \begin{center} $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ \end{center}
 \item $\wt(b|u)$ = fraction of instances in $D_u$ with $h(\vx)=b$
 \item Initially, use labeled data to estimate $\wt(b|u)$
