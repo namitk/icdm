@@ -164,9 +164,9 @@
 \item Labeled data $L$ unrepresentative of the entire dataset
 \end{itemize}
 \pause
-\item So \textcolor{blue}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\item \textcolor{blue}{Measured accuracy on labeled set $\neq$ True accuracy on data}
 \pause
-\item Hence need a method that can converge to the true accuracy
+\item Need a method that can converge to the true accuracy
 \begin{enumerate}
 \item An algorithm that returns a good estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
 \item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
@@ -180,7 +180,7 @@
 \only<1>{
 \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{blue}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
 \begin{itemize}
-\item \textbf{Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches \textit{(See Slogistic)}
+\item \textbf{Our Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches \textit{(See Slogistic)}
 \end{itemize}
 \begin{center}
 \begin{figure}
@@ -193,7 +193,7 @@
 \only<2>{
 \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{blue}{even a single sequential scan impractical} in an interactive setting
 \begin{itemize}
-\item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data
+\item \textbf{Our Results} : Able to match within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -260,7 +260,7 @@
 \item \textbf{Proposal} : Use \textcolor{blue}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
 \pause
-\item Learning hyperplanes (kindly refer the paper for details)
+\item Learning hyperplanes (kindly refer to the paper for details)
 \begin{itemize}
 \item \emph{Smoothing the objective} : Upper-bound with minimum of two convex objectives
 \item \emph{Optimizing the smoothed objective} : EM-like algorithm
