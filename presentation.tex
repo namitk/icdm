@@ -140,6 +140,7 @@
 % 4. Summary (1)
 % 5. Future work (1)
 % 6. Backup slides (3-4)
+\setbeamercovered{transparent}
 
 \section{Problem Motivation}
 \begin{frame}
@@ -147,14 +148,17 @@
 \begin{itemize}
 \item Many applications rely on output of imperfect classifiers deployed on large datasets \\ 
 \begin{itemize}
-\item \textbf{Examples}: Web page classification, classifying columns of a table to their semantic types
+\item[] \textbf{Examples}: Web page classification, classifying columns of a table to their semantic types
 \end{itemize}
+\pause
 \item \textbf{Common characteristics} 
 \begin{itemize}
 \item Large and diverse dataset 
 \item Labeled data unrepresentative of the entire dataset. 
 \end{itemize}
+\pause
 \item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\pause
 \item Hence need a method that can converge to the true accuracy
 \begin{enumerate}
 \item An algorithm that returns a good estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
@@ -176,7 +180,8 @@
 \includegraphics[width=0.5\hsize]{figs/e1tableannote_crop}
 \caption{Absolute error (on the $Y$ axis) of different estimation algorithms against no. of labeled instances (on the $X$ axis)}
 \end{figure}
-\end{center}}
+\end{center}
+\pause}
 
 \only<2>{
 \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{red}{even a single sequential scan impractical} in an interactive setting
@@ -198,12 +203,15 @@
 \frametitle{Related Work}
 \begin{itemize}
 \item Most existing work on \textit{learning} rather than \textit{evaluating} classifiers
+\pause
 \item Existing works on selecting instances for evaluating classifiers:
 \begin{itemize}
 \item \citep{sawade10} present a new proposal distribution for sampling instances
 \item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume that classifier $C(\vx)$ is probabilistic \& base their selection on $\Pr(y|\vx)$ scores
 \end{itemize}
+\pause
 \item Unlike \citep{bennett10} and \citep{druck11}, \textcolor{red}{instead of fixing a stratification, we learn a new one every time more data gets labeled}
+\pause
 \item None of the existing methods consider cases where the dataset $D$ is too large to even afford a single sequential scan %Our method is designed to perform accuracy estimation and instance selection on D which can only be accessed via an index.
 \end{itemize}
 \end{frame}
@@ -218,13 +226,13 @@
 \begin{algorithmic}[1]\itemsep-5pt
 \STATE $B=\text{\#buckets},~\vft=\text{feature vector},~\vwa=\text{hyperplanes}$
 \STATE $\estSb_b, \wt_b=\text{accuracy \& weight esimates for bucket b}$
-\REPEAT
+\REPEAT \vspace{5pt}
 \STATE Learn stratification function $h(\vft|\vwa)$ 
 \STATE Stratify $L$ via $h(.)$ \& compute $\{\estSb_b:1\le b \le B\}$
 \STATE Stratify $D$ via $h(.)$ \& compute $\{\wt_b:1\le b \le B\}$
 \STATE Display accuracy estimates:  $\estSS=\sum\nolimits_b\wt_b\estSb_b$
 \STATE Get stratified sample set $L'$ from $D$
-\STATE For each $\vx_i \in L'$, get label $y_i$, and add $(\vx_i,y_i)$ to $L$
+\STATE For each $\vx_i \in L'$, get label $y_i$, and add $(\vx_i,y_i)$ to $L$ \vspace{1pt}
 \UNTIL{accuracy $\estSS$ not converged and labeler not bored.}
 \STATE{\bf Return} $\estSS$
 \end{algorithmic}
@@ -237,17 +245,21 @@
 \frametitle{Learning a stratification strategy} %\vspace{-8mm}
 \begin{itemize}
 \item Stratify input space so that instances in each stratum have similar accuracy values
+\pause
 \begin{itemize}
 \item \emph{Supervised clustering methods} : Learn a distance function \\ \textbf{Issue} : Do not scale well 
 \item \textbf{Proposal} : Use \textcolor{red}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
+\pause
 \item Learning hyperplanes (kindly refer the paper for details)
 \begin{itemize}
 \item \emph{Smoothing the objective} : Upper-bound with minimum of two convex objectives
 \item \emph{Optimizing the smoothed objective} : EM-like algorithm
 \item \emph{Ensuring distinct $r$ hyperplanes} : Re-weight instances -- ideas from boosting. 
 \end{itemize}
+\pause
 \item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{red}{Smooth based on labeled data in neighbouring buckets}
+\pause
 \item Method agnostic to the type of classifier under consideration
 \end{itemize}
 \end{frame}
@@ -354,10 +366,14 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \section{Summary}
 \begin{frame}{Summary}
 \begin{enumerate}
-\item Addressed the challenge of \emph{calibrating a classifier's accuracy on large unlabeled datasets given small amounts of labeled data and a human labeler}
-\item Proposed a stratified sampling-based method that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
-\item Between 15\% and 62\% relative reduction achieved in error compared to existing approaches
-\item Algorithm made \emph{scalable} by proposing optimal sampling strategies for accessing indexed unlabeled data directly
+\item Addressed the challenge of \emph{\textcolor{red}{calibrating a classifier's accuracy on large unlabeled datasets} given small amounts of labeled data and a human labeler}
+\pause
+\item \textcolor{red}{Proposed a stratified sampling-based method for accuracy estimation} that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
+\pause
+\item Between 15\% and 62\% relative reduction in error achieved compared to existing approaches
+\pause
+\item Algorithm made \emph{scalable} by proposing \textcolor{red}{optimal sampling strategies for accessing indexed unlabeled data directly}
+\pause
 \item Close to optimal performance while reading three orders of magnitude fewer instances on large datasets 
 \end{enumerate}
 \end{frame}
