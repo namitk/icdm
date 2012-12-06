@@ -15,6 +15,7 @@
 \usepackage{subfigure}
 \usepackage{setspace}
 \usepackage{color}
+\usepackage{wrapfig}
 
 % \usetheme{Boadilla}
 % \usetheme{Berlin}
@@ -112,9 +113,9 @@
 
 
 \title[]{Active Accuracy Estimation on Large Datasets}
-\author {Namit Katariya, Arun Iyer, Sunita Sarawagi}
-\institute{IIT Bombay}
-\date{}
+% \author {Namit Katariya, Arun Iyer, Sunita Sarawagi}
+% \institute{IIT Bombay}
+% \date{}
 
 \bibliographystyle{apalike}
 
@@ -174,34 +175,48 @@
 \end{itemize}
 \end{frame}
 
+\section{Problem Statement}
 \begin{frame}
-\frametitle{Goals}
+\frametitle{Problem Statement}
+\begin{enumerate}
+\item \textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{blue}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{5mm}
 
-\only<1>{
-\textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{blue}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
-\begin{itemize}
-\item \textbf{Our Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches \textit{(See Slogistic)}
-\end{itemize}
+\item \textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{blue}{even a single sequential scan impractical} in an interactive setting
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{A few results...}
+
+
 \begin{center}
 \begin{figure}
-\includegraphics[width=0.5\hsize]{figs/e1tableannote_crop}
-\caption{Absolute error (on the $Y$ axis) of different estimation algorithms against no. of labeled instances (on the $X$ axis)}
+\begin{minipage}[b]{0.45\linewidth}
+\begin{center}
+\includegraphics[width=.8\hsize]{figs/e1tableannote_crop}
+\caption{\tiny{Absolute error (on the $Y$ axis) against no. of labeled instances (on the $X$ axis)}}
+\end{center}
+\end{minipage}
+\hspace{2mm}
+\begin{minipage}[b]{0.45\linewidth}
+15\% to 62\% relative reduction in error compared to existing \linebreak approaches\textit{(See Slogistic)} \\ \vspace{1cm}
+\end{minipage}
+\end{figure}
+\hrule
+\begin{figure}
+\begin{minipage}[b]{0.45\linewidth}
+Within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data \\
+\end{minipage}
+\hspace{2mm}
+\begin{minipage}[b]{0.45\linewidth}
+\begin{center}
+\includegraphics[width=.9\hsize]{figs/allDataWts-crop}
+\caption{\tiny{Comparing methods of sampling from indexed data for
+  estimating bucket weights}}
+\end{center}  
+\end{minipage}
 \end{figure}
 \end{center}
-\pause}
-
-\only<2>{
-\textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{blue}{even a single sequential scan impractical} in an interactive setting
-\begin{itemize}
-\item \textbf{Our Results} : Able to match within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data
-\end{itemize}
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.46\hsize]{figs/allDataWts-crop}
-\caption{Comparing methods of sampling from indexed data for
-  estimating bucket weights}
-\end{center}
-\end{figure}}
 
 \end{frame}
 
