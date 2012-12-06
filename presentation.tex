@@ -112,7 +112,8 @@
 \renewcommand{\item}{\setlength{\itemsep}{\wideitemsep}\olditem}
 
 
-\title[]{Active Accuracy Estimation on Large Datasets}
+\title[{\makebox[.45\paperwidth]{Active Evaluation of Classifiers\hfill%
+       \insertframenumber/\inserttotalframenumber}}]{Active Accuracy Estimation on Large Datasets}
 \author {Namit Katariya, Arun Iyer, Sunita Sarawagi}
 \institute{IIT Bombay}
 % \date{}
@@ -169,7 +170,7 @@
 \pause
 \item Need a method that can converge to the true accuracy
 \begin{enumerate}
-\item An algorithm that returns a good estimate $\hat{\mu}$ of true accuracy $\mu$ of the classifier
+\item An algorithm that returns a good estimate $(\hat{\mu})$ of true accuracy $(\mu)$ of the classifier
 \item \textit{Scalable algorithm} : should work on large datasets where sequential scan not possible \& data accessible only via an index
 \end{enumerate} 
 \end{itemize}
@@ -292,18 +293,24 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 \frametitle{Scaling up -- Instance selection on large amounts of data} 
 \begin{itemize}
 \pause
-\item Unlabeled data accesesed for \\ (i) computing $\wt_b~~~$ (ii) generating sample $L'$ to label \& add to $L$
+\item Unlabeled data accesesed for 
+\begin{enumerate}
+\item computing $\wt_b=$ the weight corresponding to each bucket $b$ 
+\item generating sample $L'$ from $D$ to label and add to $L$
+\end{enumerate}
 \vspace{1mm}
 \pause
-\item \textit{Assumption}: Unlabeled data $D$ indexed so as to partition data into disjoint parts $D_1,\ldots,D_U$. For each partition we can 
-\begin{itemize}
-\item Get its size $N_u$ in terms of number of instances, \& \vspace{-1.5mm}
-\item Generate a uniform random sample of instances within the partition
-\end{itemize}
-\vspace{1mm} \pause
+%\item \textit{Assumption}: Unlabeled data $D$ indexed so as to partition data into disjoint parts $D_1,\ldots,D_U$. For each partition we can 
+%\begin{itemize}
+%\item Get its size $N_u$ in terms of number of instances, \& \vspace{-1.5mm}
+%\item Generate a uniform random sample of instances within the partition
+%\end{itemize}
+%\vspace{1mm} \pause
 \item Solutions for both, assigning bucket weights and selecting instances, based on sampling from a proposal distribution
 \vspace{1mm} \pause
-\item In each case, proposal distribution found by setting up an appropriate optimization problem (kindly refer to the paper for details)
+\item In each case, proposal distribution found by setting up an appropriate optimization problem
+\pause
+\item Obtimal proposal distribution can be calculated using some standard assumptions on the index (kindly refer to the paper for details)
 \end{itemize}
 \end{frame}
 
