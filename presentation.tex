@@ -25,12 +25,16 @@
 % \usetheme{Copenhagen}
 % \usetheme{Darmstadt}
 % \usetheme[height=5mm]{Singapore}
- \usetheme{Amsterdam}
+\usetheme{Amsterdam}
+\usecolortheme{dolphin} 
+\usecolortheme[rgb={0,0.17,0.45}]{structure} 
+
+% \usetheme{EastLansing}
 
 \setbeamertemplate{navigation symbols}{}
 % \useoutertheme{infolines}
 
-\addtolength{\textwidth}{4mm}
+\addtolength{\textwidth}{6mm}
 
 \def\newblock{\hskip .11em plus .33em minus .07em}
 
@@ -109,6 +113,8 @@
 
 \title[]{Active Accuracy Estimation on Large Datasets}
 \author {Namit Katariya, Arun Iyer, Sunita Sarawagi}
+\institute{IIT Bombay}
+\date{}
 
 \bibliographystyle{apalike}
 
@@ -116,7 +122,7 @@
 \begin{frame}
 \titlepage
 \begin{center}
-\large{ICDM 2012 Presentation} \\ \vspace*{10pt}
+\large{International Conference on Data Mining, 2012} \\ \vspace*{10pt}
 \end{center}
 \end{frame}
 
@@ -145,6 +151,7 @@
 \section{Problem Motivation}
 \begin{frame}
 \frametitle{Motivation}
+\pause
 \begin{itemize}
 \item Many applications rely on output of imperfect classifiers deployed on large datasets \\ 
 \begin{itemize}
@@ -153,11 +160,11 @@
 \pause
 \item \textbf{Common characteristics} 
 \begin{itemize}
-\item Large and diverse dataset 
-\item Labeled data unrepresentative of the entire dataset. 
+\item Large and diverse dataset $D$
+\item Labeled data $L$ unrepresentative of the entire dataset
 \end{itemize}
 \pause
-\item So \textcolor{red}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\item So \textcolor{blue}{Measured accuracy on labeled set $\neq$ True accuracy on data}
 \pause
 \item Hence need a method that can converge to the true accuracy
 \begin{enumerate}
@@ -171,7 +178,7 @@
 \frametitle{Goals}
 
 \only<1>{
-\textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{red}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
+\textbf{Accuracy estimation} : Estimate accuracy of a classifier on a large unlabeled dataset based on a \textcolor{blue}{small, possibly unrepresentative, labeled set} and a human labeler \vspace*{1mm}
 \begin{itemize}
 \item \textbf{Results} : Between 15\% and 62\% relative reduction in error compared to existing approaches \textit{(See Slogistic)}
 \end{itemize}
@@ -184,7 +191,7 @@
 \pause}
 
 \only<2>{
-\textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{red}{even a single sequential scan impractical} in an interactive setting
+\textbf{Scalable algorithm} : Perform accuracy estimation on unlabeled data so large that it makes \textcolor{blue}{even a single sequential scan impractical} in an interactive setting
 \begin{itemize}
 \item \textbf{Results} : Able to match within 0.5\% of the estimates of methods based on full scan while sampling just 2.5k instances from indexed unlabeled data
 \end{itemize}
@@ -198,19 +205,20 @@
 
 \end{frame}
 
-\section{Background}
+\section{Related Work}
 \begin{frame}
 \frametitle{Related Work}
 \begin{itemize}
+\pause
 \item Most existing work on \textit{learning} rather than \textit{evaluating} classifiers
 \pause
 \item Existing works on selecting instances for evaluating classifiers:
 \begin{itemize}
 \item \citep{sawade10} present a new proposal distribution for sampling instances
-\item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume that classifier $C(\vx)$ is probabilistic \& base their selection on $\Pr(y|\vx)$ scores
+\item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume classifier $C(\vx)$ to be probabilistic and use its $\Pr(y|\vx)$ scores for stratification \& selection
 \end{itemize}
 \pause
-\item Unlike \citep{bennett10} and \citep{druck11}, \textcolor{red}{instead of fixing a stratification, we learn a new one every time more data gets labeled}
+\item Unlike \citep{bennett10} and \citep{druck11}, \textcolor{blue}{instead of fixing the stratification, we learn a new one every time more data gets labeled}
 \pause
 \item None of the existing methods consider cases where the dataset $D$ is too large to even afford a single sequential scan %Our method is designed to perform accuracy estimation and instance selection on D which can only be accessed via an index.
 \end{itemize}
@@ -225,7 +233,7 @@
 \begin{spacing}{0.8}
 \begin{algorithmic}[1]\itemsep-5pt
 \STATE $B=\text{\#buckets},~\vft=\text{feature vector},~\vwa=\text{hyperplanes}$
-\STATE $\estSb_b, \wt_b=\text{accuracy \& weight esimates for bucket b}$
+\STATE $\estSb_b, \wt_b=\text{accuracy \& weight estimates for bucket b}$
 \REPEAT \vspace{5pt}
 \STATE Learn stratification function $h(\vft|\vwa)$ 
 \STATE Stratify $L$ via $h(.)$ \& compute $\{\estSb_b:1\le b \le B\}$
@@ -244,11 +252,12 @@
 \begin{frame}
 \frametitle{Learning a stratification strategy} %\vspace{-8mm}
 \begin{itemize}
+\pause
 \item Stratify input space so that instances in each stratum have similar accuracy values
 \pause
 \begin{itemize}
 \item \emph{Supervised clustering methods} : Learn a distance function \\ \textbf{Issue} : Do not scale well 
-\item \textbf{Proposal} : Use \textcolor{red}{Hash codes} based on projections on hyperplanes learned over the feature space
+\item \textbf{Proposal} : Use \textcolor{blue}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
 \pause
 \item Learning hyperplanes (kindly refer the paper for details)
@@ -258,7 +267,7 @@
 \item \emph{Ensuring distinct $r$ hyperplanes} : Re-weight instances -- ideas from boosting. 
 \end{itemize}
 \pause
-\item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{red}{Smooth based on labeled data in neighbouring buckets}
+\item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{blue}{Smooth based on labeled data in neighbouring buckets}
 \pause
 \item Method agnostic to the type of classifier under consideration
 \end{itemize}
@@ -267,8 +276,19 @@
 \begin{frame}
 \frametitle{Scaling up -- Instance selection on large amounts of data} 
 \begin{itemize}
-\item TODO: explain where instance selection is needed
-\item TODO: describe the idea behind the algorithm to perform accuracy estimation \& instance selection on unlabeled data $D$ which can only be accessed via an efficient index partition 
+\pause
+\item Unlabeled data accesesed for \\ (i) computing $\wt_b~~~$ (ii) generating sample $L'$ to label \& add to $L$
+\vspace{1mm}
+\pause
+\item \textit{Assumption}: Unlabeled data $D$ indexed so as to partition data into disjoint parts $D_1,\ldots,D_U$. For each partition we can 
+\begin{itemize}
+\item Get its size $N_u$ in terms of number of instances, \& \vspace{-1.5mm}
+\item Generate a uniform random sample of instances within the partition
+\end{itemize}
+\vspace{1mm} \pause
+\item Solutions for both, assigning bucket weights and selecting instances, based on sampling from a proposal distribution
+\vspace{1mm} \pause
+\item In each case, proposal distribution found by setting up an appropriate optimization problem (kindly refer to the paper for details)
 \end{itemize}
 \end{frame}
 
@@ -366,13 +386,13 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \section{Summary}
 \begin{frame}{Summary}
 \begin{enumerate}
-\item Addressed the challenge of \emph{\textcolor{red}{calibrating a classifier's accuracy on large unlabeled datasets} given small amounts of labeled data and a human labeler}
+\item Addressed the challenge of \emph{\textcolor{blue}{calibrating a classifier's accuracy on large unlabeled datasets} given small amounts of labeled data and a human labeler}
 \pause
-\item \textcolor{red}{Proposed a stratified sampling-based method for accuracy estimation} that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
+\item \textcolor{blue}{Proposed a stratified sampling-based method for accuracy estimation} that provides better estimates than simple averaging \& better selection of instances for labeling than random sampling 
 \pause
 \item Between 15\% and 62\% relative reduction in error achieved compared to existing approaches
 \pause
-\item Algorithm made \emph{scalable} by proposing \textcolor{red}{optimal sampling strategies for accessing indexed unlabeled data directly}
+\item Algorithm made \emph{scalable} by proposing \textcolor{blue}{optimal sampling strategies for accessing indexed unlabeled data directly}
 \pause
 \item Close to optimal performance while reading three orders of magnitude fewer instances on large datasets 
 \end{enumerate}
@@ -391,196 +411,39 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \begin{frame}[allowframebreaks]{References}
 \bibliography{report}
 \end{frame}
+
+\begin{frame}
+\frametitle{Assigning Bucket Weights}
+\begin{itemize}
+\item Sample from a proposal distribution : $\hat{A}_{S_q} = \frac{1}{|S|}\sum\nolimits_{\vx\in S} \frac{1/N}{q(\vx)}\estSb_{h(\vx)}$
+\item \textbf{Result} : When $q(\vx)$ is restricted so that all instances within a partition $u$ are sampled with the same probability $q_u$,
+the expected squared error between $\hat{A}_{S_q}$ and $\estSS$ is minimized when 
+\begin{center} $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ \end{center}
+\item $\wt(b|u)$ = fraction of instances in $D_u$ with $h(\vx)=b$
+\item Initially, use labeled data to estimate $\wt(b|u)$
+\item As more instances are sampled from any $D_u$, refine estimates of $\wt(b|u)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Instance Selection}
+\begin{itemize}
+\item Perform importance sampling where imp($\vx$) $\propto \estVar_{h(\vx)}$ without evaluating $h(\vx)$ over entire $D$
+\item Generate a larger sample $S$ via proposal distribution $q(\vx)$ restricted to choose same $q(\vx) ~\forall \vx$ in data
+partition $D_u$ 
+\item Then from $S$ generate the sample of $k$ instances by weighting each instance as $f(\vx)/q(\vx)$. Good only if $q(\vx) \sim f(\vx)$
+\item Best $q(\vx)$ found by solving for unlabeled bucket weights $q_1,\ldots,q_U$
+so that expected L1 distance between $f(\vx)$ and $q(\vx)$ is minimized
+\begin{center}
+$\min_{q_1,\ldots,q_U} \sum_u\sum_b \wt_u\wt(b|u) \left|\frac{\estVar_b}{Z_f} - q_u\right| ~s.t. \sum_u N\wt_uq_u=1$
+\end{center}
+\item $Z_f$ approximated as $\sum\nolimits_b\estVar_b\sum\nolimits_u\wt_u\wt(b|u)$
+\item Get $\wt(b|u)$ as explained in the previous slide
+\end{itemize}
+\end{frame}
+
 \end{document}
 
-%% \subsection{Related Work}
-%\begin{frame}
-%\frametitle{Related Work}
-%\begin{itemize}
-%\item \textit{Online Stratified Sampling: Evaluating Classifiers at Web-Scale \cite{bennett10}}
-%\begin{itemize}
-%\item Disproportionate optimal sampling ($n_b \propto \hat{\sigma_b}$) 
-%\item Assume classifier score
-%\item Divide the score range into equal sizes -- stratifying into contiguous classifier score intervals breaks distribution into segments that
-%are more homogeneous on average than the overall distribution
-%\end{itemize}
-%\item \textit{Toward Interactive Training and Evaluation \cite{druck11}} 
-%\begin{itemize}
-%\item Very similar to \cite{bennett10} -- however the estimation method is generalized to structured output spaces as well
-%\end{itemize}
-%\item \textit{Active Risk Estimation \cite{sawade10}}
-%\begin{itemize}
-%\item Sample using a proposal distribution: $\estProp = \frac{1}{\sum_i \frac{1}{q(\vx_i)}} \sum\nolimits_i \frac{\acc_i}{q(\vx_i)}$
-%\item However optimal $q(\vx)$ depends on the unknown true accuracy $\TP$ and the unknown true distribution $\Pr(y|\vx)$.
-%\item $\TP~\leftarrow$ Introspective accuracy 
-%\item $\Pr(y|\vx)~\leftarrow~C(\vx)$ assumed to be a probabilistic classifier that provides an estimate of the true $\Pr(y|\vx)$.  
-%\end{itemize}
-%\end{itemize}
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section{Active Accuracy Estimation}
-%% \subsection{Algorithm}
-%\begin{frame}
-%\frametitle{Algorithm Overview}
-%\begin{center}
-%\textsc{Loop for active accuracy estimation}
-%\end{center}
-%\begin{algorithmic}[1]
-%\STATE {\bf Input} $L,D,k,R,B$
-%\REPEAT
-%\STATE Learn stratification function $h(\vx|\vw) \mapsto [1\ldots B]$ if more than $R$ instances labeled since last training
-%\STATE Compute $\{\estSb_b:1\le b \le B\}$ from $L$ 
-%\STATE Compute $\{\wt_b:1\le b \le B\}$ from $D$
-%\STATE Display estimates:  $\estSS=\sum\nolimits_b\wt_b\estSb_b$.
-%\STATE Select set $S$ of $k$  instances from $D$ (Using the static index)
-%\STATE For each $\vx_i \in S$, get label $y_i$, and add $(\vx_i,y_i)$ to $L$.  
-%% compute $a_i=\acc(y_i,C(\vx_i))$ 
-%\UNTIL{accuracy not converged and labeler not bored.}
-%\end{algorithmic}
-%\end{frame}
-%
-%% \subsection{Subproblems}
-%\begin{frame}[allowframebreaks]
-%\frametitle{Subproblems}
-%\begin{enumerate}
-%\item \textbf{Learning Stratification Function}
-%\begin{itemize}
-%\item Learn $\nb = \log B$ hash functions $h_1,\ldots,h_\nb$ 
-%such that each $h_j(\vx)$ maps an instance to 0 or 1, and the concatenation of
-%the $\nb$ bits gives the stratum number of an instance.
-%\item  Reduces to learning $\nb$ hyperplanes $\vw_1,\ldots,\vw_\nb$ --
-%instances lying on same side of all hyperplanes have 
-%similar accuracy values.
-%\end{itemize}
-%
-%\item \textbf{Estimating Accuracy of a Stratum}
-%\begin{itemize}
-%\item Depend on just the labeled instances in a stratum might lead to over-fitting in strata with very few labeled examples
-%\item Smooth estimates based on labeled data in neighboring buckets : $\estSb_b=\frac{n^+_b + \gamma\sum_{d=1}^\nb\beta^d\sum_{b':\ham(b,b')=d}n^+_{b'}}
-%{n_b + \gamma\sum_{d=1}^\nb\beta^d\sum_{b':\ham(b,b')=d}n_{b'}}$ \\
-%We used $\gamma=5$, and $\beta=0.1$ for our experiments
-%\end{itemize}
-%
-%\framebreak
-%
-%\item \textbf{Estimating weight of each stratum}
-%\begin{itemize}
-%\item We need to find fraction $\wt_b$ of instances from $D$ that
-%lie in each stratum $b$.  
-%\item When size of $D$ is small, a single pass over the data yields $\wt_b=\frac{1}{N}\sum\nolimits_{\vx \in D}\indicate{h(\vx|\vw)=b}$ for each $b$.
-%How these weights are computed using the index on the data, without accessing the entire data every time $h(\vx|\vw)$ is retrained, is discussed later
-%\end{itemize}
-%
-%\item \textbf{Selecting instances for labeling}
-%\begin{itemize}
-%\item The optimal method is to perform importance sampling on
-%$D$ where importance of an instance $\vx$ is proportional to $\estVar_{h(\vx)}$. 
-%\item If $D$ is explicitly partitioned as per $h(\vx)$ : Selecting a bucket with probability
-%proportional to $\wt_b\estVar_b$ and then select an instance within $b$ with equal probability. 
-%\item For large $D$, this sampling, without stratifying the entire $D$, is performed using the static index on the data.
-%\end{itemize}
-%\end{enumerate}
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section{Learning Hyperplanes}
-%% \subsection{Goals}
-%\begin{frame}
-%\frametitle{Learning Hyperplanes}
-%\begin{itemize}
-%\item Learn hyperplanes $\vw_1,\ldots,\vw_\nb$ which will be used to hash partition the data
-%\item Minimize the expected square error of estimate $\estSS$ which is $\sum\nolimits_b\wt_b^2\tfrac{\estVar_b^2}{n_b}$
-%\item \textit{Related recent work} : Learning hash functions where objective stated in terms of distances between pairs of instances. \\ 
-%\textit{Popular variant} : Distance scores between instance pairs provided. Hash functions learnt such that Hamming distance over learned signatures correlates with given distance scores
-%\item \textbf{Result} : If $p_b \propto n_b$, then $\sum_b\wt_b^2\tfrac{\estVar_b^2}{n_b}=\sum_b\tfrac{1}{n^2n_b}\sum_{\vx_i,\vx_j \in L_b}(\acc_i-\acc_j)^2$.
-%\end{itemize}
-%\end{frame}
-%
-%% \subsection{Review of Hash Learning Techniques}
-%\begin{frame}
-%\frametitle{Hash Learning Techniques}
-%\begin{itemize}
-%\item Min-Loss Hashing \cite{norouzi2011minimal} 
-%\begin{itemize}
-%\item Hinge-like loss function
-%\item Objective smoothed by piecewise linear upper bound as in \cite{tsochantaridis05}
-%\item For us, local minimas were very bad \& we could not progress beyond the initial step with both random and all-zero initialization of $\vw$ values
-%\end{itemize}
-%
-%\item Binary Reconstructive Embedding \cite{kulis2009learning}
-%\begin{itemize}
-%\item Updates a single hyperplane parameter at a time optimally in a coordinate ascent loop
-%\item We found the single parameter update strategy to be very slow for our task
-%\end{itemize}
-%
-%\item Sequential Projection Learning \cite{wang2010sequential}
-%\begin{itemize}
-%\item Sequentially learns each hyperplane optimally in a block coordinate ascent loop
-%\item Replace sign($\cdot$)  with signed magnitude in the objective
-%\item First eigenvector of transformed data matrix
-%\item Reweight instances misclassified by previously learnt hyperplanes
-%\end{itemize}
-%
-%\end{itemize}
-%\end{frame}
-%
-%% \subsection{Signed Logistic Hashing}
-%\begin{frame}[allowframebreaks]
-%\frametitle{Signed Logistic Hashing}
-%\begin{itemize}
-%\item Initialize hyperplanes \& update single hyperplane at a time on re-weighted set of instances until local minima is reached
-%\item Fix $r-1$ hyperplanes -- training data partitioned into $B/2$ groups $L_1,\ldots,L_{B/2}$. Using remaining hyperplane, bisect each partition $L_k$ into 2 parts $L^1_k$ and $L^2_k$ so that sum of error over the new $B$ buckets minimized
-%\item Error of bucket $b$ =  $n_b\estVar_b^2$ 
-%\item For binary $a$, $\estVar_b^2 = \posf_b(1-\posf_b)$ where $\posf_b$ = fraction of labeled instances $i$ in bucket $b$ with $\acc_i=1$
-%\item Let $\Err(\vw,L_k)$ denote sum of error of buckets $L^1_k$ and $L^2_k$ created on bisecting group $L_k$ using
-%$\vw$. Clearly, $\Err(\vw,L_k) = \np\fp(1-\fp) + \nn\fn(1-\fn)$ Non-differentiable \& non-convex objective
-%\framebreak
-%\item Let $\loss(a_i,\vw\cdot\vx_i)$ = convex upper bound to $\sign(\vw\cdot\vx_i)$ Then,  $\Err(\vw,L_k) \le \min(\sum_{\vx^i \in L_k}\loss(1-a_i,\vw\cdot\vx_i), \sum_{\vx^i \in L_k}\loss(a_i,\vw\cdot\vx_i))$
-%\item \textit{Relaxed Objective} : $\min_{\vw}\sum_{k=1}^{B/2}\min(\sum_{\vx^i \in L_k}\loss(1-a_i,\vw\cdot\vx_i), \sum_{\vx^i \in L_k}\loss(a_i,\vw\cdot\vx_i))$
-%\item Solve using a EM-like algorithm
-%\begin{itemize}
-%\item Assume for each group $k$, we know $z_k$ a function on $a$ returns either identity $a$ or negation $1-a$ 
-%\item Consider objective $\min_{\vw}\sum\nolimits_{k=1}^{B/2}\sum\nolimits_{\vx^i \in L_k}\loss(z_k(a_i),\vw\cdot\vx_i)$
-%\item Start with some initial guess of $z_k$ = identity and find a $\vw$
-%\item For a fixed $\vw$, find optimal $z_k$ that minimizes loss of group $k$
-%\item Continue until convergence to a local minima
-%\end{itemize}
-%\framebreak
-%\item \textbf{Initializing hyperplanes} : Hierarchical partitioning of data
-%\begin{itemize}
-%\item Initially, entire data in a single group 
-%\item Find hyperplane that partitions the group so as to minimize $\loss()$ on the group 
-%\item Repeat following in a loop $B-1$ times : Find largest $m$ groups and for each group $g$ invoke the binary classifier to minimize $\loss()$ on $g$.  Pick best of these $m$ hyperplanes (best = minimize sum of error over all current buckets)
-%\end{itemize}
-%\item \textbf{Reweighting instances}
-%\begin{itemize}
-%\item $\minor(L_k)$ = minority class in $L_k$, \\ $e_k$ = fraction of instances $\vx_i \in L_k$ for which $\acc_i=\minor(L_k)$
-%\item Interpret $e_k$ as error incurred on $L_k$ from previous hyperplanes 
-%\item Assign weights $u_i$ to each instance $\vx_i \in L_{k}$ as $u_i=\frac{1-e_k}{e_k}~ \text{if} ~a_i = \minor(L_k)$ else $u_i=1$
-%\end{itemize}
-%\framebreak
-%\begin{center}
-%\textsc{Signed Logistic Hashing}
-%\end{center}
-%\begin{algorithmic}
-%\STATE $\vw^0_1 \cdots \vw^0_r$ = Initial hyperplanes
-%\WHILE{estimated error reduces}
-%\FOR{$j=1$ to $r$}
-%\STATE $u_i$ = weight of instance $i$  as discussed
-%\STATE $z_k=$Id for all $B/2$ groups of $L$ after $\vw_j$ is removed.
-%\WHILE{$z_k$ changes} 
-%\STATE  $\vw_j = \argmin_{\vw}\sum\nolimits_{k=1}^{B/2}\sum\nolimits_{\vx^i \in L_k}u_i\loss(z_k(a_i),\vw\vx_i)$
-%\STATE $z_k = \argmin_{z = \text{Id,Neg}}\sum\nolimits_{\vx^i \in L_k}\loss(z(a_i),\vw\vx_i)$
-%\ENDWHILE
-%\ENDFOR
-%\ENDWHILE
-%\end{algorithmic}
-%\end{itemize}
-%\end{frame}
-%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %\section{Sampling on Indexed Data}
