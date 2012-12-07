@@ -275,9 +275,9 @@ However, all assume classifier $C(\vx)$ to be probabilistic and use its $\Pr(y|\
 \pause
 \item Learning hyperplanes (details in the paper)
 \begin{itemize}
-\item \emph{Smoothing the objective} %: Upper-bound with minimum of two convex objectives
-\item \emph{Optimizing the smoothed objective} % : EM-like algorithm
-\item \emph{Ensuring distinct hyperplanes} % : Re-weight instances -- ideas from boosting
+\item \emph{Smoothing the objective} : Convex upper bound
+\item \emph{Optimizing the smoothed objective} : EM-like algorithm
+\item \emph{Ensuring distinct hyperplanes} : Re-weight instances (boosting)
 \end{itemize}
 \pause
 \item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{blue}{Smooth based on labeled data in neighbouring buckets}
