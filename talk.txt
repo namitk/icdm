@@ -1,0 +1,34 @@
+Good afternoon and welcome to this short presentation about our work on "Active Accuracy Estimation on Large Datasets"
+
+This is the outline of the talk. We'll start with the motivation, define the problem, describe some previous work in this direction and how it doesn't address the scenario, our solution and finally the results we obtained. 
+
+* Motivation
+Many applications these days rely on the output of imperfect classifiers on large datasets. For example, deciding whether a webpage is a homepage or not or classifying columns of a web table to it's semantic type. What is common to these problems? Firstly, a large and diverse dataset D. Secondly, a relatively small labeled set L. More importantly, very often this small set will be unrepresentative of D. As a result, given a classifier and to evaluate whether it will work well in such a problem setting, we cannot rely on it's measured accuracy on just the labeled set. In fact, in one of our column annotation tasks, we observed exactly the same: accuracy of the classifier on the labeled set was a decent 56% but as we tried annotating more columns, we observed that the accuracy was converging towards around 16%. Thus we needed a method that can: first, provide an accuracy estimate that converges to its true accuracy on the data with minimum amount of additonal labeling required. Second, we also want to scale our algorithm to work in cases where the dataset is so large that even a single sequential scan over it is not possible.    
+
+* Problem statement:
+
+* Related work:
+Most existing work has happened in the domain of _learning_ rather than evaluating _classifiers_. There has been some work on selecting instances for labeling to evaluate classifiers. The Active risk estimation paper presents a proposal distribution for sampling while the other two explore the idea of stratified sampling. However the classifier's p(y|x) score is the basis in all of them in either selection of instances or stratification. We wanted to specifically avoid depending on the scores since even for trained probabilitic classifiers, a recent study has shown that most of them do not provide well calibrated scores. Hence we stratify using hashing techniques based on learnt hyperplanes, motivated by recent extensive work in this domain. Also unlike the papers that use the idea of stratification, we refine our hyperplanes every time more points get labeled instead of fixing a stratification. Lastly, none of the methods meet the scalability challenge.
+
+* Our solution:
+ ** Overall idea
+   On a high level, the overall idea is fairly straight-forward. We repeat the following steps in a loop until our accuracy estimates converge. 
+  1. Learn the hyperplanes
+  2. Stratify the labeled set using them and get accuracy estimates for each bucket
+  3. Stratify the entire dataset D to get the weights for each bucket used in stratified sampling
+  4. Get a stratified sample L' from the dataset 
+  5. Label L' and add it to L
+
+ ** Learning stratification strategy
+  As is required for stratified sampling techniques to work well, we stratify such that instances with similar accuracies fall in the same strata. This problem is well known and supervised clustering techniques are usually used to attack it where you try to learn a distance function that achieves homogeneous strata. However these are not feasible wrt the idea of retraining every time and also not scalable. Hence we stratify by hashing each point to its projections on learnt hyperplanes. We present in the paper our algorithm for learning hyperplanes, updating one at a time, making use of the fact that accuracy is either 0 or 1 in the common-case scenario. Once we learn the hyperplanes, we estimate the accuracy for each bucket. Simple averaging is prone to overfitting e.g it might be the case than no points lie in a specific bucket. Hence we also smooth these estimates based on labeled points in its neighboring buckets. So if you have noticed, nowhere have we assumed anything about the classifier. It could be a probabilitic one or manually developed rules or decision trees - our algorithm is agnostic to it. 
+
+ ** Scaling up
+  Unlabeled data is accessed in our algorithm in the following two steps: computing the weights for each bucket and generating a sample L' from the dataset. How to perform each of the above step without a parse of the entire dataset is slightly technical and the paper has the details. The underlying idea in both is sampling from proposal distribution. 
+
+* Results:
+ ** Datasets: describe as in slides
+ ** Comparison of estimation strategies on TableAnnote
+ ** Comparison of various stratification strategies on TableAnnote
+ ** Comparison of methods of sampling from indexe data for estimating bucket weights
+
+* Summarize
