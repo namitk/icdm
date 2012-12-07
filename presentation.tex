@@ -1,4 +1,4 @@
-\documentclass[11pt]{beamer}
+\documentclass[usenames,dvipsnames, 11pt]{beamer}
 
 % \usepackage[latin1]{inputenc}
 \usepackage{natbib}
@@ -11,10 +11,10 @@
 
 \usepackage{amsfonts}
 \usepackage{amsthm}
-\usepackage{graphics, tikz}
+% \usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphics}
 \usepackage{subfigure}
 \usepackage{setspace}
-\usepackage{color}
 \usepackage{wrapfig}
 
 % \usetheme{Boadilla}
@@ -350,8 +350,17 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \begin{center}
 \begin{figure}
 \includegraphics[width=0.75\hsize]{figs/e1axis.png}
-\caption{HomeGround data: Absolute error ($Y$ axis) of different estimation algorithms against increasing number of labeled instances ($X$ axis)}
 \end{figure}
+\small{
+\begin{tabular}{|c l|}
+\hline
+\textcolor{MidnightBlue}{Random} & Random Sampling \\
+\hline
+\textcolor{Thistle}{PropSample} & Sampling from proposal distribution \\
+\hline
+\textcolor{OliveGreen}{ScoreBins} & Stratified sampling with scores \\
+\hline
+\end{tabular}}
 \end{center}}
 
 \only<3>{
@@ -373,9 +382,21 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \begin{center}
 \begin{figure}
 \includegraphics[width=\hsize]{figs/e2tableannote_crop}
-\caption{HomeGround data: Error of different stratification methods against increasing
-  training sizes \& for different number of bits}
+%\caption{HomeGround data: Error of different stratification methods against increasing
+%  training sizes \& for different number of bits}
 \end{figure}
+\small{
+\begin{tabular}{|c l|}
+\hline
+\textcolor{MidnightBlue}{NoStratify} & Simple averaging (no stratification) \\
+\hline
+\textcolor{Thistle}{ScoreBins} & Stratify using classifier scores \\
+\hline
+\textcolor{OliveGreen}{SeqProj\_hash} & Learn hyperplanes using method in \citep{wang2010sequential} \\
+\hline
+\textcolor{Orchid}{BRE\_hash} & Learn hyperplanes using method in \citep{kulis2009learning} \\
+\hline
+\end{tabular}}
 \end{center}}
 
 \only<5>{
@@ -524,82 +545,3 @@ $\min_{q_1,\ldots,q_U} \sum_u\sum_b \wt_u\wt(b|u) \left|\frac{\estVar_b}{Z_f} - 
 %\end{frame}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section{Experiments}
-%% \subsection{Overall Comparison}
-%\begin{frame}
-%\frametitle{Experiments : Overall Comparison}
-%\begin{center}
-%\textsc{Error of different estimation algorithms against increasing number of labeled instances} 
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.34\hsize]{figs/e1wekacrop}
-%\includegraphics[width=0.34\hsize]{figs/e1webspamcrop}
-%\includegraphics[width=0.34\hsize]{figs/e1wwtucrop}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.35\hsize]{figs/e1wwtcrop}
-%\includegraphics[width=0.35\hsize]{figs/e1ydatasetcrop}
-%\end{center}
-%\end{frame}
-%
-%% \subsection{Comparison of Stratification Methods}
-%\begin{frame}
-%\frametitle{Comaprison of Stratification Methods}
-%\begin{center}
-%\textsc{Error of different stratification methods against increasing training sizes \& for different no. of bits}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.34\hsize]{figs/e2wekacrop}
-%\includegraphics[width=0.34\hsize]{figs/e2webspamcrop}
-%\includegraphics[width=0.34\hsize]{figs/e2wwtucrop}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.42\hsize]{figs/e2wwtcrop}
-%\includegraphics[width=0.42\hsize]{figs/e2ydatasetcrop}
-%\end{center}
-%\end{frame}
-%
-%% subsection{Efficiency of Indexed Data Access}
-%\begin{frame}
-%\frametitle{Efficiency of Indexed Data Access}
-%\begin{center}
-%\textsc{Comparing methods of sampling from indexed data for estimating bucket weights}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.45\hsize]{figs/allWts-crop}
-%\end{center}
-%\begin{center}
-%\textsc{Error of different methods for selecting instances for labeling against increasing labeled data}
-%\end{center}
-%\begin{center}
-%\includegraphics[width=0.30\hsize]{figs/selectB5-crop}
-%\includegraphics[width=0.30\hsize]{figs/selectB7-crop}
-%\end{center}
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section{Conclusions}
-%\begin{frame}
-%\frametitle{Conclusions}
-%\begin{center}
-%\begin{itemize}
-%\item Proposed method of estimating the accuracy of a
-%classifier on very large and diverse dataset  
-%\item Method based on stratified sampling theory and makes following contributions beyond existing
-%methods 
-%\begin{itemize}
-%\item Develop a stratification method based on $r$ bit
-%signatures learned using a novel signed logistic algorithm
-%\item Perform stratified sampling directly on indexed
-%unlabeled data without requiring full data scan on every data
-%re-stratification
-%\end{itemize}
-%\item Experiments on several real datasets show that our method provides
-%more accurate estimates than existing methods, and that our strategies
-%for accessing unlabeled data gives close to optimal performance while
-%reading orders of magnitude fewer instances.
-%\end{itemize}
-%\end{center}
-%\end{frame}
