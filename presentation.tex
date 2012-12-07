@@ -186,39 +186,36 @@
 \end{enumerate}
 \end{frame}
 
-\begin{frame}
-\frametitle{A few results...}
-
-
-\begin{center}
-\begin{figure}
-\begin{minipage}[b]{0.45\linewidth}
-\begin{center}
-\includegraphics[width=\hsize]{figs/e1axis.png}
-\end{center}
-\end{minipage}
-\hspace{2mm}
-\begin{minipage}[b]{0.45\linewidth}
-15\% to 62\% relative reduction in error compared to existing \linebreak approaches\textit{(See Slogistic)} \\ \vspace{1cm}
-\end{minipage}
-\end{figure}
-\hrule
-\begin{figure}
-\begin{minipage}[b]{0.45\linewidth}
-Within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data \\
-\end{minipage}
-\hspace{2mm}
-\begin{minipage}[b]{0.45\linewidth}
-\begin{center}
-\includegraphics[width=\hsize]{figs/allDataWts-crop}
-\caption{\tiny{Comparing methods of sampling from indexed data for
-  estimating bucket weights}}
-\end{center}  
-\end{minipage}
-\end{figure}
-\end{center}
-
-\end{frame}
+%\begin{frame}
+%\frametitle{A few results...}
+%\begin{center}
+%\begin{figure}
+%\begin{minipage}[b]{0.45\linewidth}
+%\begin{center}
+%\includegraphics[width=\hsize]{figs/e1axis.png}
+%\end{center}
+%\end{minipage}
+%\hspace{2mm}
+%\begin{minipage}[b]{0.45\linewidth}
+%15\% to 62\% relative reduction in error compared to existing \linebreak approaches\textit{(See Slogistic)} \\ \vspace{1cm}
+%\end{minipage}
+%\end{figure}
+%\hrule
+%\begin{figure}
+%\begin{minipage}[b]{0.45\linewidth}
+%Within 0.5\% of the estimates of methods based on full scan, while sampling (and labeling) just 2.5k instances from indexed unlabeled data \\
+%\end{minipage}
+%\hspace{2mm}
+%\begin{minipage}[b]{0.45\linewidth}
+%\begin{center}
+%\includegraphics[width=\hsize]{figs/allDataWts-crop}
+%\caption{\tiny{Comparing methods of sampling from indexed data for
+%  estimating bucket weights}}
+%\end{center}  
+%\end{minipage}
+%\end{figure}
+%\end{center}
+%\end{frame}
 
 \section{Related Work}
 \begin{frame}
@@ -230,8 +227,9 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 \item Existing works on selecting instances for evaluating classifiers:
 \begin{itemize}
 \item \citep{sawade10} present a new proposal distribution for sampling instances
-\item \citep{bennett10} and \citep{druck11} use stratified sampling. However, both assume classifier $C(\vx)$ to be probabilistic and use its $\Pr(y|\vx)$ scores for stratification \& selection
+\item \citep{bennett10} and \citep{druck11} use stratified sampling
 \end{itemize}
+However, all assume classifier $C(\vx)$ to be probabilistic and use its $\Pr(y|\vx)$ scores for selection and/or stratification.
 \pause
 \item Unlike \citep{bennett10} and \citep{druck11}, \textcolor{blue}{instead of fixing the stratification, we learn a new one every time more data gets labeled}
 \pause
@@ -247,7 +245,7 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 \begin{algorithm}[H]
 \begin{spacing}{0.8}
 \begin{algorithmic}[1]\itemsep-5pt
-\STATE $B=\text{\#buckets},~\vft=\text{feature vector},~\vwa=\text{hyperplanes}$
+\STATE $B=\text{\#buckets},~r=\#bits,~\vft=\text{feat. vector},~\vwa=\text{hyperplanes}$
 \STATE $\estSb_b, \wt_b=\text{accuracy \& weight estimates for bucket b}$
 \REPEAT \vspace{5pt}
 \STATE Learn stratification function $h(\vft|\vwa)$ 
@@ -275,11 +273,11 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 \item \textbf{Proposal} : Use \textcolor{blue}{Hash codes} based on projections on hyperplanes learned over the feature space
 \end{itemize}
 \pause
-\item Learning hyperplanes (kindly refer to the paper for details)
+\item Learning hyperplanes (details in the paper)
 \begin{itemize}
 \item \emph{Smoothing the objective} : Upper-bound with minimum of two convex objectives
 \item \emph{Optimizing the smoothed objective} : EM-like algorithm
-\item \emph{Ensuring distinct $r$ hyperplanes} : Re-weight instances -- ideas from boosting. 
+\item \emph{Ensuring distinct hyperplanes} : Re-weight instances -- ideas from boosting
 \end{itemize}
 \pause
 \item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{blue}{Smooth based on labeled data in neighbouring buckets}
@@ -307,9 +305,9 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 %\vspace{1mm} \pause
 \item Solutions for both, assigning bucket weights and selecting instances, based on sampling from a proposal distribution
 \vspace{1mm} \pause
-\item In each case, proposal distribution found by setting up an appropriate optimization problem
+\item In each case, proposal distribution found by setting up an appropriate convex optimization problem
 \pause
-\item Optimal proposal distribution can be calculated using some standard assumptions on the index (kindly refer to the paper for details)
+\item Optimal proposal distribution can be calculated using some standard assumptions on the index (details in the paper)
 \end{itemize}
 \end{frame}
 
@@ -320,6 +318,12 @@ Within 0.5\% of the estimates of methods based on full scan, while sampling (and
 
 \only<1>{
 \framesubtitle{Summary of datasets used}
+\begin{itemize}
+\item \textbf{TableAnnote} : Annotate columns of Web tables to type nodes of an ontology
+\item \textbf{Spam} : Classifying web-pages as spam or not
+\item \textbf{DNA} : Binary DNA classification task
+\item \textbf{HomeGround, HomePredicted} : Dataset of (entity, web-page) instances and decide if web-page was a homepage for the entity
+\end{itemize} \vspace{-5mm}
 \begin{center}
 \begin{table}
 \centering
@@ -337,7 +341,7 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \hline
 \end{tabular}
 \end{small}
-\caption{Summary of Datasets}
+% \caption{Summary of Datasets}
 \end{table}
 \end{center}}
 
