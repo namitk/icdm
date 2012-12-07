@@ -275,9 +275,9 @@ However, all assume classifier $C(\vx)$ to be probabilistic and use its $\Pr(y|\
 \pause
 \item Learning hyperplanes (details in the paper)
 \begin{itemize}
-\item \emph{Smoothing the objective} : Upper-bound with minimum of two convex objectives
-\item \emph{Optimizing the smoothed objective} : EM-like algorithm
-\item \emph{Ensuring distinct hyperplanes} : Re-weight instances -- ideas from boosting
+\item \emph{Smoothing the objective} %: Upper-bound with minimum of two convex objectives
+\item \emph{Optimizing the smoothed objective} % : EM-like algorithm
+\item \emph{Ensuring distinct hyperplanes} % : Re-weight instances -- ideas from boosting
 \end{itemize}
 \pause
 \item $\estSb_b=\frac{1}{n_b}\sum_{i\in L_b}\acc_i~$ prone to over-fitting. \textcolor{blue}{Smooth based on labeled data in neighbouring buckets}
@@ -346,7 +346,7 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \end{center}}
 
 \only<2>{
-\framesubtitle{Comparison of estimation strategies on the HomeGround dataset}
+\framesubtitle{Comparison of estimation strategies on the TableAnnote dataset}
 \begin{center}
 \begin{figure}
 \includegraphics[width=0.75\hsize]{figs/e1axis.png}
@@ -358,21 +358,21 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \framesubtitle{Comparison of estimation strategies on remaining datasets}
 \begin{center}
 \begin{figure}
-\includegraphics[width=0.37\hsize]{figs/e1tableannote_crop}
 \includegraphics[width=0.37\hsize]{figs/e1spam_crop}
+\includegraphics[width=0.37\hsize]{figs/e1dna_crop}
 \end{figure}
 \begin{figure}
+\includegraphics[width=0.37\hsize]{figs/e1homeground_crop}
 \includegraphics[width=0.37\hsize]{figs/e1homepredicted_crop}
-\includegraphics[width=0.37\hsize]{figs/e1dna_crop}
 \caption{Absolute error (on the $Y$ axis) of different estimation algorithms against increasing number of labeled instances (on the $X$ axis)}
 \end{figure}
 \end{center}}
 
 \only<4>{
-\framesubtitle{Comparison of different stratification methods on the HomeGround dataset}
+\framesubtitle{Comparison of different stratification methods on the TableAnnote dataset}
 \begin{center}
 \begin{figure}
-\includegraphics[width=\hsize]{figs/e2homeground_crop}
+\includegraphics[width=\hsize]{figs/e2tableannote_crop}
 \caption{HomeGround data: Error of different stratification methods against increasing
   training sizes \& for different number of bits}
 \end{figure}
@@ -382,12 +382,12 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \framesubtitle{Comparison of different stratification methods on remaining datasets}
 \begin{center}
 \begin{figure}
-\includegraphics[width=0.5\hsize]{figs/e2tableannote_crop}
 \includegraphics[width=0.5\hsize]{figs/e2spam_crop}
+\includegraphics[width=0.5\hsize]{figs/e2dna_crop}
 \end{figure}
 \begin{figure}
+\includegraphics[width=0.5\hsize]{figs/e2homeground_crop}
 \includegraphics[width=0.5\hsize]{figs/e2homepredicted_crop}
-\includegraphics[width=0.5\hsize]{figs/e2dna_crop}
 \caption{Error of different stratification methods against increasing
   training sizes and for different number of bits}
 \end{figure}
