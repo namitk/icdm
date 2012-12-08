@@ -1,0 +1,64 @@
+Good afternoon and welcome to this talk about our work on "Active Accuracy Estimation on Large Datasets"
+
+%%SS -- removed outline.
+In this talk I will present our solution to this problem:
+
+Consider an arbitrary classifier C(x) that is deployed on a large unlabeled dataset D. Our task is to estimate the true accuracy of C(x) on D. What are we given? We have a small or a biased labeled set L such that acc(L) != acc(D). We also assume we are provided a labeler that can provide us labels of queried points. 
+%%SS
+This is a compelling problem in many real-life applications like in Web search where large-scale deployments of classifiers is routine. 
+
+%%SS -- many changes here.
+* We want our proposed solution to meet the following desired conditions:
+We wish to handle arbitrary classifiers unlike previous work in this domain which assume the classifier to output probability scores. Secondly, we are involving the user in a loop to label instances,  we want interactive speeds.  But the unlabeled data might be huge.   Our goal is to ensure interactive speeds even on very large datasets.  For example, this means that we many not even be able to afford even a single sequential scan. Instead  we assume that D is pre-indexed.  We designed selective sampling strategies specifically tied to indexed data.
+Finally, our aim is to require the user to label as few additional instances as possible. This might make our problem seem similar to active learning but it is different in the sense that active learning is tailored to learn classifier.  The problems of learning vs evaluating classifiers are quite different. 
+
+
+
+%%SS
+There are two technical aspects of this problem
+1. Accuracy estimation: To find the best estimator of the true accuracy and more importantly, do this scalably on large D. 
+2. Instance selection. This deals with selecting instances to label and add to L.  
+Given time constraint, I will cover only the first problem in this talk.  
+
+%%SS
+* Accuracy estimation
+A routine method of measuring accuracy is to just to evaluate the average accuracy on the available labeled set.
+- The simple averaged estimate is poor when L is small or biased.  Note that in this estimate the unlabeled data is totally ignored.
+
+Statistical theory provides a neat trick to exploiting unlabeled data to improve this estimate.  We call this the stratified estimate. This consists of stratifying the data into B buckets, measuring accuracy over labeled data for each bucket, estimate weight of the bucket as fraction of instances lying in the bucket and return a weighted sum of estimated accuracies in each bucket. It can be shown that if the buckets are homogeneous i.e have low variance, the stratified estimate is much better than plain averaged estimate.
+- Thus we have two main challenges here : creating strata that put instances with similar accuracies in the same bucket and secondly, estimating the bucket weights scalably. Note that we cannot stratify the entire dataset D since that might take too long.
+ 
+* Stratification strategy
+The exisiting approaches to stratification depend on the assumption that the classifier provides a probabilitic score and stratify points into fixed size partition of the range of this score. Since we wish to handle arbitrary classifiers, this approach is not feasible to our setting. 
+%%SS
+Therefore, we proceed as follows: we start with a features representation of the instance itself and any function of the result of deploying the classifier on that instance.  If the classifier does provide a probability score, this can be one of the features in this feature vector.   Other features could be "just the raw input instances", or any property of the predicted label.
+We learn a hash function h on this representation using the labeled data and refine the stratification function as more instances get added to the labeled set.
+
+%%SS --- stopped here.
+* Learning the hyperplanes
+This is well studied area and we discuss some of the existing methods which are based on smoothing and incrementally solving the objective. The minimal loss hashing paper uses a loss function that penalizes large / small hamming distances between points based on their similarity and solves the objective using stochastic gradient descent. However, when we actually used it, the algorithm stuck up in local minimas without further progress and we got very poor results. Binary reconstructive embedding paper specifies the hash function in kernel form and the parameters are coefficients of these kernels. They solve the objective using co-ordinate descent. The Sequential projection paper updates one hyperplane at a time, at each step, weighting instances misclassified by the previous hyperplanes more. As we will see, our method empirically performs better than boh of them since instead of optimizing some black-box distance measure, we exploit the 0/1 nature of the accuracy values to design a more efficient algorithm. 
+So coming to our overall approach, we too learn a single hyperplane at a time. As mentioned, we use the special nature of the problem to design an efficient relaxation. While optimizing for a single hyperplane, we allow the buckets formed by the remaining ones to choose their positive and negative side after adding the new hyperplane. This facilitates an EM like algorithm for optimization. Also, we borrow ideas from boosting to re-weight instances to ensure they are distinct. 
+
+* Estimating bucket weights
+We next come to the problem of estimating bucket weights without sequentially hashing the entire D. A simple rewriting of the stratified estimate shows that it is an average of the accuracy of all instances in D. A standard way of estimating the above is to sample from a proposal distribution and weight each instance appropriately. The unconstrained optimal q(i) is impracticle because it involves assigning each instance to its bucket. We note that the only q(i) we are allowed are the ones that assign the same probability to all instances within an index partition D_u. Under the above constraint, the optimal q_u is as shown. It depends on the quantity p(b|u)  which is the fraction of instances in D_u belonging to bucket b. We estimate this quantity using the labeled data and an initial static sample and refine it as more data gets labeled.
+
+* Results:
+ ** Datasets: describe as in slides
+ 
+ ** Comparison of estimation strategies on TableAnnote
+numBits = 4, number of strata = 16, number of additional points labeled in each loop = 5
+Every dot in the figure denotes the absolutre error after a retraining occurs. 
+Few observations:
+- Error reduces significantly as more instances get added to D
+- Even starting seed error is lowest for our method => stratified estimate better than simple averaging
+- Score bins doesn't perform as well as our method showing the unreliability of score based stratification
+- Even when initial seed accuracy is same, our method performs better than score bins showing the importance of refining the stratification with increased labeled data 
+
+ ** Comparison of various stratification strategies on TableAnnote
+- Our method performs better than Seq projection in all cases which shows that relaxation that exploits the 0/1 nature of accuracies is more effective
+- BRE worse than Seq projection which validates the claim made in Seq projection paper that solving for a single hyperplane at a time better than co-ordinate ascent methods
+
+ ** Comparison of methods of sampling from indexed data for estimating bucket weights
+We performed these experiments on the 3 largest datasets. Indices were created by hashing them on a 7-bit signature. We compare against w_b estimates obtained using a uniform random sample on D. We measure error as difference bettween our estimated accuracy and the estimate obtained via full scan. We perform better than uniform sampling for small sample sizes and the difference diminishes as the sample size grows.  
+
+* Summarize

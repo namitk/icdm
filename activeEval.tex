@@ -118,7 +118,7 @@
 \institute{IIT Bombay}
 % \date{}
 
-\bibliographystyle{alpha}
+\bibliographystyle{apalike} 
 
 \begin{document}
 \begin{frame}
@@ -129,12 +129,12 @@
 \end{frame}
 
 %%SS -- no need for an outline slide in a 15 min talk.
-\AtBeginSection[]
-{
-  \begin{frame}{Outline}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
+%\AtBeginSection[]
+%{
+%  \begin{frame}{Outline}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -154,7 +154,7 @@
 
 \section{Problem setup}
 \begin{frame}
-\frametitle{Motivation}
+\frametitle{Problem setup}
 \pause
 \begin{itemize}
 \item Setup
@@ -168,7 +168,9 @@
 \item Given
   \begin{itemize}
 \item A labeled set $L$ :  small or unrepresentative of $D$ 
+\begin{itemize}
 \item \textcolor{blue}{Measured accuracy on labeled set $\neq$ True accuracy on data}
+\end{itemize}
 \item A human labeler
 \end{itemize}
 \end{itemize}
@@ -198,7 +200,7 @@
   %%SS -- copy reason from paper.
   \begin{itemize}
   \item Active learning usually used in the context of learning classifiers
-  \item Task of learning classifier different from evaluating given classifier
+  \item Task of learning classifiers different from evaluating given classifier
   \end{itemize}
   \end{itemize}
   \end{enumerate}
@@ -231,7 +233,7 @@ The problem has two aspects \vspace{2mm}
   \begin{itemize}
   \item Stratify $L$ and $D$ into $B$ buckets $(L_1,D_1),\ldots,(L_B,D_B)$ 
   \item Measure accuracy $\hat{\mu}_b$ of $L_b$ in each bucket $b$
-  \item Estimate weight $w_b$ as fraction of instances in $D_b$
+  \item Estimate weight $w_b$ as fraction of $D$ instances in bucket b$=\frac{|D_b|}{|D|}$
 %%SS complete.
   \item Stratified estimate $\estSS=\sum_b{w_b\hat{\mu}_b}$
   \end{itemize}
@@ -253,14 +255,14 @@ Two challenges
 \pause
 \item \textbf{Existing approach} : Bin $\Pr(y|\vx)$ values assumed to be provided by a classifier 
   \begin{itemize}
-  \item \cite{bennett10} and \cite{druck11} %%SS (add the two citations).
+  \item \citeauthor{bennett10} and \citeauthor{druck11} %%SS (add the two citations).
   \item Not applicable since we wish to handle arbitrary classifiers.
   \end{itemize}
   \pause  
 \item \textbf{Our Proposal} : 
   \begin{itemize}
   \pause
-  \item $F(\vx,C):$ A feature represenation of the input $\vx$ and the result of deploying $C$ on  $\vx$
+  \item $F(\vx,C):$ A feature representation of the input $\vx$ and the result of deploying $C$ on  $\vx$
   \item Learn a hash function $h$ on features using the labeled data $L$
   \item \textcolor{Blue}{Stratification evolves as more labeled instances get added to $L$} (fixed in existing approaches)
   \end{itemize}
@@ -276,18 +278,18 @@ Two challenges
 \item \textbf{Existing methods} : Based on smoothing the objective and incrementally solving it
 \pause
 \begin{itemize}
-\item \cite{norouzi2011minimal} penalizes large (small) hamming distance between similar (dissimilar) points. \textbf{Issue} : Bad local minimas. Poor results
+\item \citeauthor{norouzi2011minimal} penalize large (small) hamming distance between similar (dissimilar) points. \textbf{Issue} : Bad local minimas. Poor results
 \pause
-\item \cite{kulis2009learning} specifies hash function in kernel form \& params are coefficients of these kernels. Solved using co-ordinate descent
+\item \citeauthor{kulis2009learning} specify hash function in kernel form \& params are coefficients of these kernels. Solved using co-ordinate descent
 \pause
-\item \cite{wang2010sequential} proposes to sequentially update one hyperplane at a time. Also re-weight misclassified pairs of points while learning each subsequent hyperplane
+\item \citeauthor{wang2010sequential} propose to sequentially update one hyperplane at a time. Also re-weights misclassified pairs of points while learning each subsequent hyperplane
 \end{itemize}
 \pause
 \item \textbf{Our approach} : \textcolor{Blue}{Learn one hyperplane at a time}
 \pause
 \begin{itemize}
 \item \emph{Relaxation} : Make use of the fact distance measure is over accuracy that usually takes 0/1 value
-\item \emph{Optimization} : Allow groups formed by existing hyperplanes to choose their +ve \& -ve side after  optimizing for new hyperplane
+\item \emph{Optimization} : Allow groups formed by existing hyperplanes to choose their +ve \& -ve side while optimizing for new hyperplane
 \item \emph{Distinct hyperplanes} : Re-weight instances as in boosting
 \end{itemize}
 \end{itemize}
@@ -296,7 +298,7 @@ Two challenges
 %%SS -- give one slide technical summary.  what you had earlier was too high-level
 % \subsection{Estimating bucket weights}
 \begin{frame}
-\frametitle{Estimating $w_b$ without sequentially hashing $D$}
+\frametitle{Estimating bucket weights without sequentially hashing $D$}
 \begin{itemize}
 \pause
 \item $\estSS=\sum_b{w_b\hat{\mu}_b}=\frac{1}{N}\sum_{i \in D}\hat{\mu}_{h(\vft_i)}$
@@ -307,10 +309,9 @@ Two challenges
 \pause
 \item Allowed $q(i)$ are the ones which assign same probability to all instances $i$ within an index partition $D_u$ of $D$
 \pause
-\item \textbf{Claim} : Under above restriction, $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ where $\wt(b|u)$ is the fraction of  $i\in D_u$ with $h(\vft_i)=b$
+\item \textbf{Claim} : Under above restriction, $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ where \textcolor{Blue}{$\wt(b|u)$ is the fraction of  $i\in D_u$ with $h(\vft_i)=b$}
 \pause
 \item $\wt(b|u)$ estimate : Initially depend on labeled data \& small static sample. Refine estimate as more instances get sampled from $D_u$
-\pause
 \end{itemize}
 \end{frame}
 
@@ -395,9 +396,9 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \hline
 \textcolor{Thistle}{ScoreBins} & Stratify using classifier scores \\
 \hline
-\textcolor{OliveGreen}{SeqProj\_hash} & Learn hyperplanes using method in \citep{wang2010sequential} \\
+\textcolor{OliveGreen}{SeqProj\_hash} & Learn hyperplanes using method in \citeauthor{wang2010sequential} \\
 \hline
-\textcolor{Orchid}{BRE\_hash} & Learn hyperplanes using method in \citep{kulis2009learning} \\
+\textcolor{Orchid}{BRE\_hash} & Learn hyperplanes using method in \citeauthor{kulis2009learning} \\
 \hline
 \end{tabular}}
 \end{center}}
