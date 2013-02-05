@@ -113,10 +113,10 @@
 
 
 \title[{\makebox[.45\paperwidth]{Active Evaluation of Classifiers\hfill%
-       \insertframenumber/\inserttotalframenumber}}]{Active Accuracy Estimation on Large Datasets}
+       \insertframenumber/\inserttotalframenumber}}]{\textbf{Active Evaluation of Classifiers on Large Datasets}}
 \author {Namit Katariya, Arun Iyer, Sunita Sarawagi}
 \institute{IIT Bombay}
-% \date{}
+\date{December 13, 2012}
 
 \bibliographystyle{apalike} 
 
@@ -173,6 +173,7 @@
 \end{itemize}
 \item A human labeler
 \end{itemize}
+\item Compelling problem in many real-life applications
 \end{itemize}
 \end{frame}
 
@@ -183,18 +184,18 @@
 \begin{enumerate}
 %%SS -- format this better
 \pause
-\item \textcolor{Blue}{Handle arbitrary classifier} e.g. a user script
+\item \textcolor{blue}{Handle arbitrary classifier} e.g. a user script
   \begin{itemize}
   \item existing work assumes that $C(\vx)$ is probabilistic and can output well-calibrated $\Pr(y|\vx)$ values.
   \end{itemize}
   \pause
-\item \textcolor{Blue}{Provide interactive speed to user in loop even when $D$ is very large}
+\item \textcolor{blue}{Provide interactive speed to user in loop even when $D$ is very large}
   \begin{itemize}
   \item even a single sequential scan on $D$ may not be practical. 
   \item $D$ can be accessed only via an index.
   \end{itemize}
   \pause
-\item Require user to \textcolor{Blue}{label as few additional instances} as possible
+\item Require user to \textcolor{blue}{label as few additional instances} as possible
   \begin{itemize}
   \item Similar to active learning but different ...
   %%SS -- copy reason from paper.
@@ -229,7 +230,7 @@ The problem has two aspects \vspace{2mm}
 \pause
 \item \emph{Simple averaged estimate} : $\hat{\mu}_R=\frac{1}{n}\sum_{i \in L}\acc_i$ is poor when $L$ is small or biased
 \pause
-\item A classical solution : \textcolor{Blue}{stratified estimate}
+\item A classical solution : \textcolor{blue}{stratified estimate}
   \begin{itemize}
   \item Stratify $L$ and $D$ into $B$ buckets $(L_1,D_1),\ldots,(L_B,D_B)$ 
   \item Measure accuracy $\hat{\mu}_b$ of $L_b$ in each bucket $b$
@@ -238,13 +239,13 @@ The problem has two aspects \vspace{2mm}
   \item Stratified estimate $\estSS=\sum_b{w_b\hat{\mu}_b}$
   \end{itemize}
   \pause
-   \textcolor{Blue}{Error of $\estSS $ $<<$  Error of $\hat{\mu}_R$ if instances within a bucket are homogeneous}
+   \textcolor{blue}{Error of $\estSS $ $<<$  Error of $\hat{\mu}_R$ if instances within a bucket are homogeneous}
 \end{itemize}
 \pause
 Two challenges
 \begin{enumerate}
-\item Selecting a stratification strategy that \textcolor{Blue}{puts instances with same error in the same bucket}
-\item \textcolor{Blue}{Finding $w_b$ scalably} when $D$ is large $\Rightarrow$ cannot stratify whole of $D$.
+\item Selecting a stratification strategy that \textcolor{blue}{puts instances with same error in the same bucket}
+\item \textcolor{blue}{Finding $w_b$ scalably} when $D$ is large $\Rightarrow$ cannot stratify whole of $D$.
 \end{enumerate}
 \end{frame}
 
@@ -264,7 +265,7 @@ Two challenges
   \pause
   \item $F(\vx,C):$ A feature representation of the input $\vx$ and the result of deploying $C$ on  $\vx$
   \item Learn a hash function $h$ on features using the labeled data $L$
-  \item \textcolor{Blue}{Stratification evolves as more labeled instances get added to $L$} (fixed in existing approaches)
+  \item \textcolor{blue}{Stratification evolves as more labeled instances get added to $L$} (fixed in existing approaches)
   \end{itemize}
 \end{itemize}
 \end{frame}
@@ -273,27 +274,70 @@ Two challenges
 % \subsection{Learning hyperplanes}
 \begin{frame}
 \frametitle{Learning hyperplanes}
-\pause
+\framesubtitle{Background}
 \begin{itemize}
-\item \textbf{Existing methods} : Based on smoothing the objective and incrementally solving it
 \pause
+\item \emph{Hash function} : \textcolor{blue}{concatenation of $r$ bits} 
 \begin{itemize}
-\item \citeauthor{norouzi2011minimal} penalize large (small) hamming distance between similar (dissimilar) points. \textbf{Issue} : Bad local minimas. Poor results
+\item bit $k=\text{sign}(\textbf{w}_{k}.\textbf{F}(x))$ i.e. the side of $\textbf{w}_{k}$ on which $x$ lies 
+\item $\textbf{w}_{k}$ : parameters to be learnt
+\end{itemize} \vspace{2pt}
 \pause
-\item \citeauthor{kulis2009learning} specify hash function in kernel form \& params are coefficients of these kernels. Solved using co-ordinate descent
+\item Learning problem : non-smooth and non-convex \vspace{2pt}
 \pause
-\item \citeauthor{wang2010sequential} propose to sequentially update one hyperplane at a time. Also re-weights misclassified pairs of points while learning each subsequent hyperplane
-\end{itemize}
-\pause
-\item \textbf{Our approach} : \textcolor{Blue}{Learn one hyperplane at a time}
-\pause
+\item Existing work : learning distance-preserving hash function \vspace{2pt}
 \begin{itemize}
-\item \emph{Relaxation} : Make use of the fact distance measure is over accuracy that usually takes 0/1 value
-\item \emph{Optimization} : Allow groups formed by existing hyperplanes to choose their +ve \& -ve side while optimizing for new hyperplane
-\item \emph{Distinct hyperplanes} : Re-weight instances as in boosting
+\item Learn $\textbf{w}_k$ parameters sequentially \& smooth the sign function through various tricks
+\end{itemize} \vspace{2pt}
+\pause
+\item Our problem can be expressed as \textcolor{blue}{special case of learning distance-preserving hash function} 
+\begin{itemize}
+\item Exploit 0/1 nature of accuracy values rather than optimizing a black-box distance measure
+\item Allows a more efficient algorithm
 \end{itemize}
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\frametitle{Learning hyperplanes}
+\framesubtitle{Our approach}
+\begin{itemize}
+\pause
+\item \emph{Main step} : find the best value of $\textbf{w}_k$ for a bit $k$, \textcolor{blue}{assuming hyperplanes of other bits are fixed} \vspace{1pt}
+\pause
+\item For each bucket formed from remaining hyperplanes, arbitrarily choose which side of hyperplane $\textbf{w}_k$ it wants to call +ve or -ve  \vspace{1pt}
+\pause
+\item Use logistic loss to find the optimal $\textbf{w}_k$ \textcolor{blue}{so that in each bucket, $\textbf{w}_k$ correctly puts points on the ``right" side}
+\begin{itemize}
+\item Can be solved optimally using a standard logistic classifier  
+\end{itemize} \vspace{1pt}
+\pause
+\item Use a \textcolor{blue}{EM-like iteration to refine the side chosen as positive} in each bucket until convergence \vspace{1pt}
+\end{itemize}
+\pause
+We see in our experiments that our method provides much better results than existing algorithms
+\end{frame}
+
+%\begin{itemize}
+%\item \textbf{Existing methods} : Based on smoothing the objective and incrementally solving it
+%\pause
+%\begin{itemize}
+%\item \citeauthor{norouzi2011minimal} penalize large (small) hamming distance between similar (dissimilar) points. \textbf{Issue} : Bad local minimas. Poor results
+%\pause
+%\item \citeauthor{kulis2009learning} specify hash function in kernel form \& params are coefficients of these kernels. Solved using co-ordinate descent
+%\pause
+%\item \citeauthor{wang2010sequential} propose to sequentially update one hyperplane at a time. Also re-weights misclassified pairs of points while learning each subsequent hyperplane
+%\end{itemize}
+%\pause
+%\item \textbf{Our approach} : \textcolor{blue}{Learn one hyperplane at a time}
+%\pause
+%\begin{itemize}
+%\item \emph{Relaxation} : Make use of the fact distance measure is over accuracy that usually takes 0/1 value
+%\item \emph{Optimization} : Allow groups formed by existing hyperplanes to choose their +ve \& -ve side while optimizing for new hyperplane
+%\item \emph{Distinct hyperplanes} : Re-weight instances as in boosting
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
 
 %%SS -- give one slide technical summary.  what you had earlier was too high-level
 % \subsection{Estimating bucket weights}
@@ -309,7 +353,7 @@ Two challenges
 \pause
 \item Allowed $q(i)$ are the ones which assign same probability to all instances $i$ within an index partition $D_u$ of $D$
 \pause
-\item \textbf{Claim} : Under above restriction, $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ where \textcolor{Blue}{$\wt(b|u)$ is the fraction of  $i\in D_u$ with $h(\vft_i)=b$}
+\item \textbf{Claim} : Under above restriction, $q_u \propto \sqrt{\sum_{b}\estSb^2_b\wt(b|u)}$ where \textcolor{blue}{$\wt(b|u)$ is the fraction of  $i\in D_u$ with $h(\vft_i)=b$}
 \pause
 \item $\wt(b|u)$ estimate : Initially depend on labeled data \& small static sample. Refine estimate as more instances get sampled from $D_u$
 \end{itemize}
@@ -360,7 +404,7 @@ HomePredicted & 66 & 8658 & 13,951,053 & 83.2 & 93.9 \\
 \hline
 \textcolor{MidnightBlue}{Random} & Random Sampling \\
 \hline
-\textcolor{Thistle}{PropSample} & Sampling from proposal distribution \\
+\textcolor{Thistle}{PropSample} & Sampling from proposal distribution \citep{sawade10} \\
 \hline
 \textcolor{OliveGreen}{ScoreBins} & Stratified sampling with scores \\
 \hline

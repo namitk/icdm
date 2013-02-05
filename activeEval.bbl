@@ -1,0 +1,28 @@
+\begin{thebibliography}{}
+
+\bibitem[Bennett and Carvalho, 2010]{bennett10}
+Bennett, P.~N. and Carvalho, V.~R. (2010).
+\newblock Online stratified sampling: evaluating classifiers at web-scale.
+\newblock In {\em CIKM}.
+
+\bibitem[Druck and McCallum, 2011]{druck11}
+Druck, G. and McCallum, A. (2011).
+\newblock Toward interactive training and evaluation.
+\newblock In {\em CIKM}.
+
+\bibitem[Kulis and Darrell, 2009]{kulis2009learning}
+Kulis, B. and Darrell, T. (2009).
+\newblock Learning to hash with binary reconstructive embeddings.
+\newblock In {\em NIPS}.
+
+\bibitem[Sawade et~al., 2010]{sawade10}
+Sawade, C., Landwehr, N., Bickel, S., and Scheffer, T. (2010).
+\newblock Active risk estimation.
+\newblock In {\em ICML}.
+
+\bibitem[Wang et~al., 2010]{wang2010sequential}
+Wang, J., Kumar, S., and Chang, S. (2010).
+\newblock Sequential projection learning for hashing with compact codes.
+\newblock In {\em ICML}.
+
+\end{thebibliography}

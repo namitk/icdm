@@ -1,0 +1,5 @@
+\beamer@endinputifotherversion {3.10pt}
+\beamer@sectionintoc {1}{Problem setup}{2}{0}{1}
+\beamer@sectionintoc {2}{Accuracy estimation}{11}{0}{2}
+\beamer@sectionintoc {3}{Results}{38}{0}{3}
+\beamer@sectionintoc {4}{Summary}{44}{0}{4}
